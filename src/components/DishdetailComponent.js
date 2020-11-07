@@ -60,21 +60,23 @@ class DishDetail extends React.Component {
 
 
 
-render() {
-    const dish = this.props.selectedDish;
+    render() {
+        const dish = this.props.selectedDish;
 
-    return (
-        <div className="row">
-            <div className="col-12 col-md-5 m-1">
-                {this.renderDish(dish)}
+        return (
+            <div className="container">
+                <div className="row">
+                    <div className="col-12 col-md-5 m-1">
+                        {this.renderDish(dish)}
+                    </div>
+                    <div className="col-12 col-md-5 m-1">
+                        {this.renderComments(this.props.selectedDish)}
+                    </div>
+                </div>
             </div>
-            <div className="col-12 col-md-5 m-1">
-                {this.renderComments(this.props.selectedDish)}
-            </div>
-        </div>
 
-    )
-}
+        )
+    }
 }
 
 export default DishDetail;
