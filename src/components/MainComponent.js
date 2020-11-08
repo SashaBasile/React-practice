@@ -1,9 +1,11 @@
 import React from 'react';
+import Home from './HomeComponent';
 import Menu from './MenuComponent';
 import DishDetail from './DishdetailComponent';
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import { DISHES } from '../shared/dishes';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 //this component is the parent of the menu component as it uses its data
 class Main extends React.Component {
@@ -16,24 +18,36 @@ class Main extends React.Component {
         // you can pass these information to any child component via props
         this.state = {
             dishes: DISHES,
-            selectedDish: null
         };
     }
 
-    onDishSelect(dishId) {
-        this.setState({ selectedDish: dishId });
-    }
-
     render() {
+        
+        const HomePage = () => {
+            return(
+                <Home />
+            )
+        }
+        
         return (
             <div>
                 <Header />
-                <Menu dishes={this.state.dishes} onClick={(dishId) => this.onDishSelect(dishId)} />
-                <DishDetail dish={this.state.dishes.filter((dish) => dish.id === this.state.selectedDish)[0]} />
+                <Switch>
+                    <Route path="/home" component={HomePage} />
+                    <Route exact path="/menu" component={() => <Menu dishes={this.state.dishes} />} /> 
+                    <Redirect to="/home" />
+                </Switch>
                 <Footer />
             </div>
         );
     }
 }
+
+//you need to enclose your navigation within the Switch component which indicates
+//you can switch between the enclosed components. Each route available is represented
+//by a route component with its own relative path - for the menu we have adopted a different
+// syntax as this will allow us to add props.
+
+//Redirect indicates a default path. 
 
 export default Main;
