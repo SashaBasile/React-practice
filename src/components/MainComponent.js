@@ -1,15 +1,17 @@
 import React from 'react';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import Home from './HomeComponent';
 import Menu from './MenuComponent';
-import Contact from './ContactComponent';
 import Header from './HeaderComponent';
+import Contact from './ContactComponent';
 import Footer from './FooterComponent';
 import DishDetail from './DishdetailComponent';
+import About from './AboutComponent';
 import { DISHES } from '../shared/dishes';
 import { COMMENTS } from '../shared/comments';
 import { LEADERS } from '../shared/leaders';
 import { PROMOTIONS } from '../shared/promotions';
-import { Switch, Route, Redirect } from 'react-router-dom';
+
 
 //this component is the parent of the menu component as it uses its data
 class Main extends React.Component {
@@ -29,22 +31,22 @@ class Main extends React.Component {
     }
 
     render() {
-        
+
         const HomePage = () => {
-            return(
-                <Home dish={this.state.dishes.filter((dish) => dish.featured)[0]} 
+            return (
+                <Home dish={this.state.dishes.filter((dish) => dish.featured)[0]}
                     promotion={this.state.promotions.filter((promo) => promo.featured)[0]}
                     leader={this.state.leaders.filter((leader) => leader.featured)[0]}
                 />
             );
         }
 
-        const DishWithId = ({match}) => {
-            return(
-                <DishDetail dish={this.state.dishes.filter((dish) => dish.id === parseInt(match.params.dishId,10))[0]} 
-                    comments={this.state.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId,10))}
+        const DishWithId = ({ match }) => {
+            return (
+                <DishDetail dish={this.state.dishes.filter((dish) => dish.id === parseInt(match.params.dishId, 10))[0]}
+                    comments={this.state.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId, 10))}
                 />
-            );        
+            );
         }
 
         //Switch checks in the written order where to go. 
@@ -53,10 +55,11 @@ class Main extends React.Component {
                 <Header />
                 <Switch>
                     <Route path="/home" component={HomePage} />
-                    <Route exact path="/menu" component={() => <Menu dishes={this.state.dishes} />} /> 
+                    <Route exact path="/menu" component={() => <Menu dishes={this.state.dishes} />} />
                     <Route path="/menu/:dishId" component={DishWithId} />
-                    <Route exact path="/contactus" component={Contact} />
-                    <Redirect to="/home" />
+                    <Route exact path="/aboutus" component={() => <About leaders={this.state.leaders} />} />
+                    <Route path="/contactus" component={Contact} />
+                    <Redirect path="/"/>
                 </Switch>
                 <Footer />
             </div>
@@ -65,7 +68,8 @@ class Main extends React.Component {
 }
 
 //you need to enclose your navigation within the Switch component which indicates
-//you can switch between the enclosed components. Each route available is represented
+//you can switch between the enclosed components.  Switch indicates that only one
+// of the option will be rendered (the first tha match with the url indicated). Each route available is represented
 //by a route component with its own relative path - for the menu we have adopted a different
 // syntax as this will allow us to add props.
 
