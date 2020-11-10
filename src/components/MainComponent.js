@@ -53,14 +53,18 @@ class Main extends React.Component {
         return (
             <div>
                 <Header />
+               
+               
+
                 <Switch>
-                    <Route path="/home" component={HomePage} />
-                    <Route exact path="/menu" component={() => <Menu dishes={this.state.dishes} />} />
-                    <Route path="/menu/:dishId" component={DishWithId} />
-                    <Route exact path="/aboutus" component={() => <About leaders={this.state.leaders} />} />
-                    <Route path="/contactus" component={Contact} />
-                    <Redirect path="/"/>
-                </Switch>
+              <Route path='/home' component={HomePage} />
+              <Route exact path='/menu' component={() => <Menu dishes={this.state.dishes} />} />
+              <Route path="/menu/:dishId" component={DishWithId} />
+              <Route path="/aboutus" component={ () => <About leaders={this.state.leaders} />} />
+              <Route path="/contactus" component={Contact} />
+              <Redirect to="/home" />
+          </Switch>
+                
                 <Footer />
             </div>
         );
