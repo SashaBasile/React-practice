@@ -19,9 +19,26 @@ export const addComment = (dishId, rating, author, comment) => ({
 export const fetchDishes = () => (dispatch) => {
     dispatch(dishesLoading(true));
 
-    return fetch(baseUrl + 'dishes') 
-        .then(Response => Response.json())
-        .then(dishes => dispatch(addDishes(dishes)));
+    return fetch(baseUrl + 'dishes')
+        .then(response => {
+            if (response.ok) {
+                return response;
+            }
+            else {
+                var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                error.response = response;
+                throw error;
+            }
+        },
+            //if you no receive any response from the server, than handle error with the code below:
+            error => {
+                var errmess = new Error(error.message);
+                throw errmess;
+            })
+        .then(response => response.json())
+        .then(dishes => dispatch(addDishes(dishes)))
+        .catch(error => dispatch(dishesFailed(error.message)));
+
 }
 
 //DISHES
@@ -44,9 +61,25 @@ export const addDishes = (dishes) => ({
 
 //COMMENTS
 export const fetchComments = () => (dispatch) => {
-        return fetch(baseUrl + 'comments') 
-            .then(Response => Response.json())
-            .then(comments => dispatch(addComments(comments)));
+    return fetch(baseUrl + 'comments')
+        .then(response => {
+            if (response.ok) {
+                return response;
+            }
+            else {
+                var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                error.response = response;
+                throw error;
+            }
+        },
+            //if you no receive any response from the server, than handle error with the code below:
+            error => {
+                var errmess = new Error(error.message);
+                throw errmess;
+            })
+        .then(Response => Response.json())
+        .then(comments => dispatch(addComments(comments)))
+        .catch(error => dispatch(commentsFailed(error.message)));
 }
 
 export const commentsFailed = (errmess) => ({
@@ -63,9 +96,26 @@ export const addComments = (comments) => ({
 export const fetchPromos = () => (dispatch) => {
     dispatch(promosLoading());
 
-    return fetch(baseUrl + 'promotions') 
+    return fetch(baseUrl + 'promotions')
+    .then(response => {
+        if (response.ok) {
+            return response;
+        }
+        else {
+            var error = new Error('Error ' + response.status + ': ' + response.statusText);
+            error.response = response;
+            throw error;
+        }
+    },
+        //if you no receive any response from the server, than handle error with the code below:
+        error => {
+            var errmess = new Error(error.message);
+            throw errmess;
+        })
+    
         .then(Response => Response.json())
-        .then(promos => dispatch(addPromos(promos)));
+        .then(promos => dispatch(addPromos(promos)))
+        .catch(error => dispatch(promosFailed(error.message)));
 }
 
 export const promosLoading = () => ({
@@ -73,11 +123,11 @@ export const promosLoading = () => ({
 });
 
 export const promosFailed = (errmess) => ({
-type: ActionTypes.PROMOS_FAILED,
-payload: errmess
+    type: ActionTypes.PROMOS_FAILED,
+    payload: errmess
 });
 
 export const addPromos = (promos) => ({
-type: ActionTypes.ADD_PROMOS,
-payload: promos
+    type: ActionTypes.ADD_PROMOS,
+    payload: promos
 });
